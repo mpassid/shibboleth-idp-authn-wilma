@@ -195,7 +195,7 @@ THE SOFTWARE.
             <dependency>
               <groupId>com.nimbusds</groupId>
               <artifactId>nimbus-jose-jwt</artifactId>
-              <version>4.33</version>
+              <version>7.9</version>
             </dependency>       
 
             <!-- Provided Dependencies -->
