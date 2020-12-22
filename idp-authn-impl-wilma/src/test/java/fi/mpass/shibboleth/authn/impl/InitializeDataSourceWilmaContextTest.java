@@ -40,7 +40,7 @@ import fi.mpass.shibboleth.authn.impl.InitializeDataSourceWilmaContext;
 import net.shibboleth.idp.authn.AuthnEventIds;
 import net.shibboleth.idp.authn.context.AuthenticationContext;
 import net.shibboleth.idp.authn.context.RequestedPrincipalContext;
-import net.shibboleth.idp.authn.impl.PopulateAuthenticationContextTest;
+import net.shibboleth.idp.authn.impl.BaseAuthenticationContextTest;
 import net.shibboleth.idp.authn.principal.TestPrincipal;
 import net.shibboleth.idp.profile.ActionTestingSupport;
 import net.shibboleth.idp.testing.DatabaseTestingSupport;
@@ -48,7 +48,7 @@ import net.shibboleth.idp.testing.DatabaseTestingSupport;
 /**
  * Unit tests for {@link InitializeDataSourceWilmaContext}.
  */
-public class InitializeDataSourceWilmaContextTest extends PopulateAuthenticationContextTest {
+public class InitializeDataSourceWilmaContextTest extends BaseAuthenticationContextTest {
 
     /** The action to be tested. */
     private InitializeDataSourceWilmaContext action;

@@ -25,7 +25,7 @@ THE SOFTWARE.
     <parent>
         <artifactId>idp-authn-wilma</artifactId>
         <groupId>fi.mpass</groupId>
-        <version>0.9.5</version>
+        <version>1.0.0-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
     <artifactId>idp-authn-impl-wilma</artifactId>
@@ -39,6 +39,10 @@ THE SOFTWARE.
         </license>
     </licenses>
     
+    <properties>
+        <automatic.module.name>fi.mpass.authn.wilma.impl</automatic.module.name>
+    </properties>
+
     <dependencies>
         <!-- Compile Dependencies -->
         <dependency>
@@ -62,30 +66,18 @@ THE SOFTWARE.
             <groupId>${opensaml.groupId}</groupId>
             <artifactId>opensaml-profile-api</artifactId>
         </dependency>
-        <dependency>
-            <groupId>${opensaml.groupId}</groupId>
-            <artifactId>opensaml-soap-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>net.shibboleth.ext</groupId>
-            <artifactId>spring-extensions</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>${spring-webflow.groupId}</groupId>
-            <artifactId>spring-webflow</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.velocity</groupId>
-            <artifactId>velocity</artifactId>
-        </dependency>
 
         <!-- Provided Dependencies -->
 
         <!-- Runtime Dependencies -->
 
         <!-- Test Dependencies -->
+        <dependency>
+            <groupId>${opensaml.groupId}</groupId>
+            <artifactId>opensaml-core</artifactId>
+            <scope>test</scope>
+            <type>test-jar</type>
+        </dependency>
         <dependency>
             <groupId>${opensaml.groupId}</groupId>
             <artifactId>opensaml-profile-api</artifactId>
@@ -175,7 +167,7 @@ THE SOFTWARE.
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <tarLongFileMode>posix</tarLongFileMode>
-                    <descriptor>src/main/assembly/dep.xml</descriptor>
+                    <descriptors>src/main/assembly/dep.xml</descriptors>
                     <finalName>shibboleth-idp-authn-wilma-${project.version}</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
                     <outputDirectory>../target</outputDirectory>

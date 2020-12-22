@@ -41,13 +41,14 @@ import fi.mpass.shibboleth.authn.context.WilmaAuthenticationContext;
 import fi.mpass.shibboleth.authn.impl.BaseInitializeWilmaContext;
 import fi.mpass.shibboleth.authn.impl.InitializeStaticWilmaContext;
 import net.shibboleth.idp.authn.context.AuthenticationContext;
+import net.shibboleth.idp.authn.impl.BaseAuthenticationContextTest;
 import net.shibboleth.idp.authn.impl.PopulateAuthenticationContextTest;
 import net.shibboleth.idp.profile.ActionTestingSupport;
 
 /**
  * Unit tests to be shared for classes extending {@link BaseInitializeWilmaContext}.
  */
-public abstract class BaseInitializeWilmaContextTest extends PopulateAuthenticationContextTest {
+public abstract class BaseInitializeWilmaContextTest extends BaseAuthenticationContextTest {
 
     /** The action to be tested. */
     InitializeStaticWilmaContext action;
@@ -57,7 +58,7 @@ public abstract class BaseInitializeWilmaContextTest extends PopulateAuthenticat
     
     /** {@inheritDoc} */
     @BeforeMethod public void setUp() throws Exception {
-        super.setUp();
+        initializeMembers();
         sharedSecret = "mockSharedSecret";
     }
     

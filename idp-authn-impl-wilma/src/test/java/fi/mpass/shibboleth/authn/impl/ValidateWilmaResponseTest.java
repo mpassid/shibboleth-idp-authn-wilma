@@ -38,14 +38,14 @@ import fi.mpass.shibboleth.authn.context.WilmaAuthenticationContext;
 import fi.mpass.shibboleth.authn.impl.ValidateWilmaResponse;
 import net.shibboleth.idp.authn.AuthnEventIds;
 import net.shibboleth.idp.authn.context.AuthenticationContext;
-import net.shibboleth.idp.authn.impl.PopulateAuthenticationContextTest;
+import net.shibboleth.idp.authn.impl.BaseAuthenticationContextTest;
 import net.shibboleth.idp.authn.principal.UsernamePrincipal;
 import net.shibboleth.idp.profile.ActionTestingSupport;
 
 /**
  * Unit tests for {@link ValidateWilmaResponse}.
  */
-public class ValidateWilmaResponseTest extends PopulateAuthenticationContextTest {
+public class ValidateWilmaResponseTest extends BaseAuthenticationContextTest {
 
     /** The action to be tested. */
     private ValidateWilmaResponse action;
@@ -123,7 +123,7 @@ public class ValidateWilmaResponseTest extends PopulateAuthenticationContextTest
     protected void testNoFlow() throws Exception {
         action.initialize();
         final Event event = action.execute(src);
-        ActionTestingSupport.assertEvent(event, EventIds.INVALID_PROFILE_CTX);
+        ActionTestingSupport.assertEvent(event, AuthnEventIds.INVALID_AUTHN_CTX);
     }
 
     /**

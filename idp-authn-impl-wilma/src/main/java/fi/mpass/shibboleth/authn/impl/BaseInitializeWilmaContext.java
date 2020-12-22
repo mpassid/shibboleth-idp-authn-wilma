@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.net.URLCodec;
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.opensaml.profile.action.ActionSupport;
 import org.opensaml.profile.action.EventIds;
 import org.opensaml.profile.context.ProfileRequestContext;

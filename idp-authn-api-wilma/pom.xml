@@ -25,7 +25,7 @@ THE SOFTWARE.
     <parent>
         <artifactId>idp-authn-wilma</artifactId>
         <groupId>fi.mpass</groupId>
-        <version>0.9.5</version>
+        <version>1.0.0-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
     <artifactId>idp-authn-api-wilma</artifactId>
@@ -38,6 +38,10 @@ THE SOFTWARE.
             <distribution>repo</distribution>
         </license>
     </licenses>
+
+    <properties>
+        <automatic.module.name>fi.mpass.authn.wilma.api</automatic.module.name>
+    </properties>
 
     <dependencies>
         <!-- Compile Dependencies -->
@@ -57,24 +61,6 @@ THE SOFTWARE.
         <dependency>
             <groupId>${opensaml.groupId}</groupId>
             <artifactId>opensaml-profile-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>${opensaml.groupId}</groupId>
-            <artifactId>opensaml-soap-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>net.shibboleth.ext</groupId>
-            <artifactId>spring-extensions</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>${spring-webflow.groupId}</groupId>
-            <artifactId>spring-webflow</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.velocity</groupId>
-            <artifactId>velocity</artifactId>
         </dependency>
 
         <!-- Provided Dependencies -->
