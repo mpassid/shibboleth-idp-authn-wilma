@@ -30,6 +30,7 @@ THE SOFTWARE.
     </action-state>
 
     <view-state id="ExternalTransfer" view="externalRedirect:#{InitializeWilmaContext.getRedirect(flowExecutionUrl,opensamlProfileRequestContext.getSubcontext(T(net.shibboleth.idp.authn.context.AuthenticationContext)))}">
+        <attribute name="csrf_excluded" value="true" type="boolean"/>
         <transition to="ValidateWilmaAuthentication" />
     </view-state>
 
