@@ -30,7 +30,7 @@ THE SOFTWARE.
     </parent>
     <groupId>fi.mpass</groupId>
     <artifactId>idp-authn-wilma</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
