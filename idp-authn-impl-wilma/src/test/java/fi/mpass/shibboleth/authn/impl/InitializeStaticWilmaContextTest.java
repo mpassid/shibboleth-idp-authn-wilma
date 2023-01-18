@@ -23,13 +23,15 @@
 
 package fi.mpass.shibboleth.authn.impl;
 
+import java.io.UnsupportedEncodingException;
+
 import org.springframework.webflow.execution.Event;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import fi.mpass.shibboleth.authn.impl.InitializeStaticWilmaContext;
 import net.shibboleth.idp.authn.context.AuthenticationContext;
+import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 
 /**
  * Unit tests for {@link InitializeStaticWilmaContext}.
@@ -39,11 +41,16 @@ public class InitializeStaticWilmaContextTest extends BaseInitializeWilmaContext
     /** The endpoint where to send authentication request. */
     String wilmaEndpoint;
 
-    /** {@inheritDoc} */
-    @BeforeMethod public void setUp() throws Exception {
+    /** {@inheritDoc} 
+     * @throws ComponentInitializationException */
+    @BeforeMethod public void setUp() throws ComponentInitializationException {
         super.setUp();
         wilmaEndpoint = "https://wilma.example.org/mpass";
-        action = new InitializeStaticWilmaContext(sharedSecret, wilmaEndpoint);        
+        try {
+			action = new InitializeStaticWilmaContext(sharedSecret, wilmaEndpoint);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}        
         action.setHttpServletRequest(initializeServletRequest());
     }
     

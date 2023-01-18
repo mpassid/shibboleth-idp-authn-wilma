@@ -34,8 +34,8 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.bind.DatatypeConverter;
 
+import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.opensaml.profile.action.ActionSupport;
 import org.opensaml.profile.action.EventIds;
@@ -155,7 +155,7 @@ public class ValidateWilmaResponse extends AbstractValidationAction {
             final Mac mac = Mac.getInstance(algorithm);
             mac.init(macKey);
             byte[] digest = mac.doFinal(url.getBytes("UTF-8"));
-            if (!Arrays.equals(DatatypeConverter.parseHexBinary(checksum), digest)) {
+            if (!Arrays.equals(Hex.decodeHex(checksum), digest)) {
                 log.warn("{}: The checksum validation failed for user {}", getLogPrefix(),
                         getQueryParam(servletRequest, WilmaAuthenticationContext.PARAM_NAME_USER_ID));
                 log.trace("{} (params) vs {}", checksum, new String(Hex.encodeHex(digest)));
@@ -164,7 +164,7 @@ public class ValidateWilmaResponse extends AbstractValidationAction {
                 return;
             }
         } catch (NoSuchAlgorithmException | InvalidKeyException | IllegalStateException | UnsupportedEncodingException
-                | IllegalArgumentException e) {
+                | IllegalArgumentException | DecoderException e) {
             log.error("{}: Could not verify the checksum {}", getLogPrefix(), checksum, e);
             handleError(profileRequestContext, authenticationContext, AuthnEventIds.NO_CREDENTIALS,
                     AuthnEventIds.NO_CREDENTIALS);

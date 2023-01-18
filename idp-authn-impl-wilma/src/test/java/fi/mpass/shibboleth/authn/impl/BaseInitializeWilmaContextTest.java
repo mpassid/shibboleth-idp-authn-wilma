@@ -28,8 +28,8 @@ import java.util.Arrays;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
 
+import org.apache.commons.codec.binary.Hex;
 import org.opensaml.profile.action.EventIds;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.webflow.execution.Event;
@@ -38,12 +38,10 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import fi.mpass.shibboleth.authn.context.WilmaAuthenticationContext;
-import fi.mpass.shibboleth.authn.impl.BaseInitializeWilmaContext;
-import fi.mpass.shibboleth.authn.impl.InitializeStaticWilmaContext;
 import net.shibboleth.idp.authn.context.AuthenticationContext;
-import net.shibboleth.idp.authn.impl.BaseAuthenticationContextTest;
-import net.shibboleth.idp.authn.impl.PopulateAuthenticationContextTest;
-import net.shibboleth.idp.profile.ActionTestingSupport;
+import net.shibboleth.idp.authn.impl.testing.BaseAuthenticationContextTest;
+import net.shibboleth.idp.profile.testing.ActionTestingSupport;
+import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 
 /**
  * Unit tests to be shared for classes extending {@link BaseInitializeWilmaContext}.
@@ -56,8 +54,9 @@ public abstract class BaseInitializeWilmaContextTest extends BaseAuthenticationC
     /** The shared secret for calculating the checksum. */
     String sharedSecret;
     
-    /** {@inheritDoc} */
-    @BeforeMethod public void setUp() throws Exception {
+    /** {@inheritDoc} 
+     * @throws ComponentInitializationException */
+    @BeforeMethod public void setUp() throws ComponentInitializationException {
         initializeMembers();
         sharedSecret = "mockSharedSecret";
     }
@@ -140,7 +139,7 @@ public abstract class BaseInitializeWilmaContextTest extends BaseAuthenticationC
         Mac mac = Mac.getInstance(WilmaAuthenticationContext.MAC_ALGORITHM);
         mac.init(macKey);
         byte[] digest = mac.doFinal(url.getBytes("UTF-8"));
-        return Arrays.equals(DatatypeConverter.parseHexBinary(checksum), digest);
+        return Arrays.equals(Hex.decodeHex(checksum), digest);
     }
 
 }

@@ -23,6 +23,7 @@
 
 package fi.mpass.shibboleth.authn.impl;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Set;
 
 import javax.security.auth.Subject;
@@ -35,12 +36,13 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import fi.mpass.shibboleth.authn.context.WilmaAuthenticationContext;
-import fi.mpass.shibboleth.authn.impl.ValidateWilmaResponse;
 import net.shibboleth.idp.authn.AuthnEventIds;
 import net.shibboleth.idp.authn.context.AuthenticationContext;
-import net.shibboleth.idp.authn.impl.BaseAuthenticationContextTest;
+import net.shibboleth.idp.authn.impl.testing.BaseAuthenticationContextTest;
 import net.shibboleth.idp.authn.principal.UsernamePrincipal;
-import net.shibboleth.idp.profile.ActionTestingSupport;
+import net.shibboleth.idp.profile.testing.ActionTestingSupport;
+//import net.shibboleth.idp.profile.ActionTestingSupport;
+import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 
 /**
  * Unit tests for {@link ValidateWilmaResponse}.
@@ -62,15 +64,21 @@ public class ValidateWilmaResponseTest extends BaseAuthenticationContextTest {
     /** The checksum in the response. */
     private String checksum;
 
-    /** {@inheritDoc} */
+    /** {@inheritDoc} 
+     * @throws ComponentInitializationException */
     @BeforeMethod
-    public void setUp() throws Exception {
+    public void setUp() throws ComponentInitializationException {
         super.setUp();
         sharedSecret = "mockSharedSecret";
         nonce = "GILQC3JEqPf9rAnzIZJ6yy8b";
         userid = "6982e3763b008a87c2f91724ade223e27c7b4c2067fdd0fd5e3a01910f38be17";
         checksum = "2e5c07e73f9ac9977c3fda09ba779ce39205573596eed15039cdd6965f621a9d";
-        action = new ValidateWilmaResponse(sharedSecret);
+        try {
+			action = new ValidateWilmaResponse(sharedSecret);
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         action.setHttpServletRequest(initializeServletRequest(true, true, true));
     }
 

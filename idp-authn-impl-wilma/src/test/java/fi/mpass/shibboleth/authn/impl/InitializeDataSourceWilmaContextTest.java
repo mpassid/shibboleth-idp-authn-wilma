@@ -23,6 +23,7 @@
 
 package fi.mpass.shibboleth.authn.impl;
 
+import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
@@ -36,14 +37,14 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import fi.mpass.shibboleth.authn.context.WilmaAuthenticationContext;
-import fi.mpass.shibboleth.authn.impl.InitializeDataSourceWilmaContext;
 import net.shibboleth.idp.authn.AuthnEventIds;
 import net.shibboleth.idp.authn.context.AuthenticationContext;
 import net.shibboleth.idp.authn.context.RequestedPrincipalContext;
-import net.shibboleth.idp.authn.impl.BaseAuthenticationContextTest;
-import net.shibboleth.idp.authn.principal.TestPrincipal;
-import net.shibboleth.idp.profile.ActionTestingSupport;
+import net.shibboleth.idp.authn.impl.testing.BaseAuthenticationContextTest;
+import net.shibboleth.idp.authn.testing.TestPrincipal;
+import net.shibboleth.idp.profile.testing.ActionTestingSupport;
 import net.shibboleth.idp.testing.DatabaseTestingSupport;
+import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 
 /**
  * Unit tests for {@link InitializeDataSourceWilmaContext}.
@@ -64,8 +65,10 @@ public class InitializeDataSourceWilmaContextTest extends BaseAuthenticationCont
     private String contextClassRef1;
     private String selectedStateKey;
 
-    /** {@inheritDoc} */
-    @BeforeMethod public void setUp() throws Exception {
+    /** {@inheritDoc} 
+     * @throws ComponentInitializationException */
+	@BeforeMethod
+	public void setUp() throws ComponentInitializationException {
         super.setUp();
         sharedSecret = "mockSharedSecret";
         techId1 = "mockTechId";
@@ -75,8 +78,21 @@ public class InitializeDataSourceWilmaContextTest extends BaseAuthenticationCont
         dataSource = DatabaseTestingSupport.
                 GetMockDataSource("/fi/mpass/shibboleth/storage/AuthSourceStore.sql", 
                         "AuthSourceStore");
-        populateDatabase();
-        action = new InitializeDataSourceWilmaContext(sharedSecret, dataSource);
+
+		try {
+			populateDatabase();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		try {
+			action = new InitializeDataSourceWilmaContext(sharedSecret, dataSource);
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
         action.setSelectedAuthnStateKey(selectedStateKey);
         action.initialize();
     }
