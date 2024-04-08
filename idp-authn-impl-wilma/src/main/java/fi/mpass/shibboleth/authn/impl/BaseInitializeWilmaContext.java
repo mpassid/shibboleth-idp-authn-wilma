@@ -31,7 +31,7 @@ import javax.annotation.Nonnull;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.binary.Hex;
@@ -46,8 +46,8 @@ import org.slf4j.LoggerFactory;
 import fi.mpass.shibboleth.authn.context.WilmaAuthenticationContext;
 import net.shibboleth.idp.authn.AbstractAuthenticationAction;
 import net.shibboleth.idp.authn.context.AuthenticationContext;
-import net.shibboleth.utilities.java.support.annotation.constraint.NotEmpty;
-import net.shibboleth.utilities.java.support.logic.Constraint;
+import net.shibboleth.shared.annotation.constraint.NotEmpty;
+import net.shibboleth.shared.logic.Constraint;
 
 /**
  * Base class for constructing a new {@link WilmaAuthenticationContext} and attaching it to 

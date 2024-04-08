@@ -43,8 +43,8 @@ import net.shibboleth.idp.authn.context.RequestedPrincipalContext;
 import net.shibboleth.idp.authn.impl.testing.BaseAuthenticationContextTest;
 import net.shibboleth.idp.authn.testing.TestPrincipal;
 import net.shibboleth.idp.profile.testing.ActionTestingSupport;
-import net.shibboleth.idp.testing.DatabaseTestingSupport;
-import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
+import net.shibboleth.shared.testing.DatabaseTestingSupport;
+import net.shibboleth.shared.component.ComponentInitializationException;
 
 /**
  * Unit tests for {@link InitializeDataSourceWilmaContext}.

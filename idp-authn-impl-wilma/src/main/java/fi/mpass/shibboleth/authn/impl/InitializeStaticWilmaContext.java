@@ -33,8 +33,8 @@ import org.slf4j.LoggerFactory;
 
 import fi.mpass.shibboleth.authn.context.WilmaAuthenticationContext;
 import net.shibboleth.idp.authn.context.AuthenticationContext;
-import net.shibboleth.utilities.java.support.annotation.constraint.NotEmpty;
-import net.shibboleth.utilities.java.support.logic.Constraint;
+import net.shibboleth.shared.annotation.constraint.NotEmpty;
+import net.shibboleth.shared.logic.Constraint;
 
 /**
  * Constructs a new {@link WilmaAuthenticationContext} and attaches it to {@link AuthenticationContext}.

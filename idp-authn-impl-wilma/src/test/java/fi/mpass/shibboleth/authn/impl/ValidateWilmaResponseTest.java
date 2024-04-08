@@ -26,6 +26,7 @@ package fi.mpass.shibboleth.authn.impl;
 import java.io.UnsupportedEncodingException;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.security.auth.Subject;
 
 import org.opensaml.profile.action.EventIds;
@@ -36,13 +37,15 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import fi.mpass.shibboleth.authn.context.WilmaAuthenticationContext;
+import jakarta.servlet.http.HttpServletRequest;
 import net.shibboleth.idp.authn.AuthnEventIds;
 import net.shibboleth.idp.authn.context.AuthenticationContext;
 import net.shibboleth.idp.authn.impl.testing.BaseAuthenticationContextTest;
 import net.shibboleth.idp.authn.principal.UsernamePrincipal;
 import net.shibboleth.idp.profile.testing.ActionTestingSupport;
 //import net.shibboleth.idp.profile.ActionTestingSupport;
-import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
+import net.shibboleth.shared.component.ComponentInitializationException;
+import net.shibboleth.shared.primitive.NonnullSupplier;
 
 /**
  * Unit tests for {@link ValidateWilmaResponse}.
@@ -79,7 +82,16 @@ public class ValidateWilmaResponseTest extends BaseAuthenticationContextTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        action.setHttpServletRequest(initializeServletRequest(true, true, true));
+        action.setHttpServletRequestSupplier(new NonnullSupplier<HttpServletRequest>() {
+
+            @Override
+            @Nonnull
+            public HttpServletRequest get() {
+                return initializeServletRequest(true, true, true);
+            }
+            
+        }); 
+        
     }
 
     /**
@@ -140,7 +152,15 @@ public class ValidateWilmaResponseTest extends BaseAuthenticationContextTest {
      */
     @Test
     protected void testNoServlet() throws Exception {
-        action.setHttpServletRequest(null);
+        action.setHttpServletRequestSupplier(new NonnullSupplier<HttpServletRequest>() {
+
+            @Override
+            @Nonnull
+            public HttpServletRequest get() {
+                return null;
+            }
+            
+        }); 
         action.initialize();
         prc.getSubcontext(AuthenticationContext.class, false).setAttemptedFlow(authenticationFlows.get(0));
         prc.getSubcontext(AuthenticationContext.class, false).getSubcontext(WilmaAuthenticationContext.class, true);
