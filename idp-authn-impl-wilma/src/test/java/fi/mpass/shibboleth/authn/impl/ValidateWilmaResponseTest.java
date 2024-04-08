@@ -82,16 +82,34 @@ public class ValidateWilmaResponseTest extends BaseAuthenticationContextTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        action.setHttpServletRequestSupplier(new NonnullSupplier<HttpServletRequest>() {
+        action.setHttpServletRequestSupplier(initializeServletRequestSupplier(true, true, true));
+        
+    }
+
+    /**
+     * Initialize the servlet request for testing.
+     * 
+     * @param addNonce Whether or not to include nonce
+     * @param addUserid Whether or not to include userid
+     * @param addChecksum Whether or not to include checksum
+     * @return
+     */
+    protected NonnullSupplier<HttpServletRequest> initializeServletRequestSupplier(final boolean addNonce, final boolean addUserid,
+            final boolean addChecksum) {
+        final MockHttpServletRequest servletRequest = new MockHttpServletRequest();
+        servletRequest.setScheme("https");
+        servletRequest.setServerName("mock-proxy.mpass.id");
+        servletRequest.setServerPort(443);
+        servletRequest.setRequestURI("/idp/profile/SAML2/Redirect/SSO");
+        servletRequest.setQueryString(generateQuery(addNonce, addUserid, addChecksum));
+        return new NonnullSupplier<HttpServletRequest>() {
 
             @Override
-            @Nonnull
-            public HttpServletRequest get() {
-                return initializeServletRequest(true, true, true);
+            public MockHttpServletRequest get() {
+                return servletRequest;
             }
             
-        }); 
-        
+        };
     }
 
     /**
@@ -174,7 +192,7 @@ public class ValidateWilmaResponseTest extends BaseAuthenticationContextTest {
      */
     @Test
     protected void testNoWilmaContext() throws Exception {
-        action.setHttpServletRequest(initializeServletRequest(true, true, true));
+        action.setHttpServletRequestSupplier(initializeServletRequestSupplier(true, true, true));
         action.initialize();
         prc.getSubcontext(AuthenticationContext.class, false).setAttemptedFlow(authenticationFlows.get(0));
         final Event event = action.execute(src);
@@ -187,7 +205,7 @@ public class ValidateWilmaResponseTest extends BaseAuthenticationContextTest {
      */
     @Test
     protected void testNoNonce() throws Exception {
-        action.setHttpServletRequest(initializeServletRequest(false, true, true));
+        action.setHttpServletRequestSupplier(initializeServletRequestSupplier(false, true, true));
         action.initialize();
         prc.getSubcontext(AuthenticationContext.class, false).setAttemptedFlow(authenticationFlows.get(0));
         prc.getSubcontext(AuthenticationContext.class, false).getSubcontext(WilmaAuthenticationContext.class, true);
@@ -201,7 +219,7 @@ public class ValidateWilmaResponseTest extends BaseAuthenticationContextTest {
      */
     @Test
     protected void testNoUserid() throws Exception {
-        action.setHttpServletRequest(initializeServletRequest(true, false, true));
+        action.setHttpServletRequestSupplier(initializeServletRequestSupplier(true, false, true));
         action.initialize();
         prc.getSubcontext(AuthenticationContext.class, false).setAttemptedFlow(authenticationFlows.get(0));
         prc.getSubcontext(AuthenticationContext.class, false).getSubcontext(WilmaAuthenticationContext.class, true);
@@ -215,7 +233,7 @@ public class ValidateWilmaResponseTest extends BaseAuthenticationContextTest {
      */
     @Test
     protected void testNoChecksum() throws Exception {
-        action.setHttpServletRequest(initializeServletRequest(true, true, false));
+        action.setHttpServletRequestSupplier(initializeServletRequestSupplier(true, true, false));
         action.initialize();
         prc.getSubcontext(AuthenticationContext.class, false).setAttemptedFlow(authenticationFlows.get(0));
         prc.getSubcontext(AuthenticationContext.class, false).getSubcontext(WilmaAuthenticationContext.class, true);
@@ -244,7 +262,12 @@ public class ValidateWilmaResponseTest extends BaseAuthenticationContextTest {
     protected void testInvalidChecksumFormat() throws Exception {
         MockHttpServletRequest servletRequest = initializeServletRequest(true, true, true);
         servletRequest.setQueryString(servletRequest.getQueryString() + "invalid");
-        action.setHttpServletRequest(servletRequest);
+        action.setHttpServletRequestSupplier(new NonnullSupplier<HttpServletRequest>() {
+
+            @Override
+            public HttpServletRequest get() {
+                return servletRequest;
+            }});
         action.initialize();
         prc.getSubcontext(AuthenticationContext.class, false).setAttemptedFlow(authenticationFlows.get(0));
         final WilmaAuthenticationContext wilmaContext = prc.getSubcontext(AuthenticationContext.class, false)
@@ -263,7 +286,12 @@ public class ValidateWilmaResponseTest extends BaseAuthenticationContextTest {
         MockHttpServletRequest servletRequest = initializeServletRequest(true, true, true);
         final String query = servletRequest.getQueryString();
         servletRequest.setQueryString(query.substring(0, query.length() - 2) + "11");
-        action.setHttpServletRequest(servletRequest);
+        action.setHttpServletRequestSupplier(new NonnullSupplier<HttpServletRequest>() {
+
+            @Override
+            public HttpServletRequest get() {
+                return servletRequest;
+            }});
         action.initialize();
         prc.getSubcontext(AuthenticationContext.class, false).setAttemptedFlow(authenticationFlows.get(0));
         final WilmaAuthenticationContext wilmaContext = prc.getSubcontext(AuthenticationContext.class, false)
