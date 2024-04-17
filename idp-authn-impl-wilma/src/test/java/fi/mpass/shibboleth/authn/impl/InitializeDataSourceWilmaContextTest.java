@@ -49,6 +49,7 @@ import net.shibboleth.shared.component.ComponentInitializationException;
 /**
  * Unit tests for {@link InitializeDataSourceWilmaContext}.
  */
+@SuppressWarnings("null")
 public class InitializeDataSourceWilmaContextTest extends BaseAuthenticationContextTest {
 
     /** The action to be tested. */
@@ -107,20 +108,20 @@ public class InitializeDataSourceWilmaContextTest extends BaseAuthenticationCont
 
     @Test
     public void testNoMapping() throws Exception {
-        prc.getSubcontext(AuthenticationContext.class, false).setAttemptedFlow(authenticationFlows.get(0));
+        prc.getSubcontext(AuthenticationContext.class).setAttemptedFlow(authenticationFlows.get(0));
         ActionTestingSupport.assertEvent(action.execute(src), AuthnEventIds.RESELECT_FLOW);
     }
     
     @Test
     public void testInvalidState() throws Exception {
-        prc.getSubcontext(AuthenticationContext.class, false).setAttemptedFlow(authenticationFlows.get(0));
-        prc.getSubcontext(AuthenticationContext.class, false).getAuthenticationStateMap().put(selectedStateKey, "invalid");
+        prc.getSubcontext(AuthenticationContext.class).setAttemptedFlow(authenticationFlows.get(0));
+        prc.getSubcontext(AuthenticationContext.class).getAuthenticationStateMap().put(selectedStateKey, "invalid");
         ActionTestingSupport.assertEvent(action.execute(src), AuthnEventIds.RESELECT_FLOW);
     }
 
     @Test
     public void testValidState() throws Exception {
-        final AuthenticationContext authnContext = prc.getSubcontext(AuthenticationContext.class, false);
+        final AuthenticationContext authnContext = prc.getSubcontext(AuthenticationContext.class);
         authnContext.setAttemptedFlow(authenticationFlows.get(0));
         authnContext.getAuthenticationStateMap().put(selectedStateKey, techId1);
         Assert.assertNull(action.execute(src));
@@ -130,7 +131,7 @@ public class InitializeDataSourceWilmaContextTest extends BaseAuthenticationCont
 
     @Test
     public void testInvalidContextRef() throws Exception {
-        final AuthenticationContext authnContext = prc.getSubcontext(AuthenticationContext.class, false);
+        final AuthenticationContext authnContext = prc.getSubcontext(AuthenticationContext.class);
         authnContext.setAttemptedFlow(authenticationFlows.get(0));
         final RequestedPrincipalContext rpc = new RequestedPrincipalContext();
         rpc.setOperator("exact");
@@ -141,7 +142,7 @@ public class InitializeDataSourceWilmaContextTest extends BaseAuthenticationCont
 
     @Test
     public void testValidContextRef() throws Exception {
-        final AuthenticationContext authnContext = prc.getSubcontext(AuthenticationContext.class, false);
+        final AuthenticationContext authnContext = prc.getSubcontext(AuthenticationContext.class);
         authnContext.setAttemptedFlow(authenticationFlows.get(0));
         final RequestedPrincipalContext rpc = new RequestedPrincipalContext();
         rpc.setOperator("exact");

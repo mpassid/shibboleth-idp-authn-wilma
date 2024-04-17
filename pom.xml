@@ -30,7 +30,7 @@ THE SOFTWARE.
 	</parent>
 	<groupId>fi.mpass</groupId>
 	<artifactId>idp-authn-wilma</artifactId>
-	<version>1.1</version>
+	<version>1.2-rc1</version>
 	<packaging>pom</packaging>
 
 	<modules>
@@ -46,6 +46,7 @@ THE SOFTWARE.
 		<gson.version>2.9.0</gson.version>
 		<opensaml.groupId>org.opensaml</opensaml.groupId>
 		<opensaml.version>5.0.0</opensaml.version>
+		<org.testing.version>7.7.1</org.testing.version>
 		<checkstyle.configLocation>mpassid-checkstyle.xml</checkstyle.configLocation>
 	</properties>
 

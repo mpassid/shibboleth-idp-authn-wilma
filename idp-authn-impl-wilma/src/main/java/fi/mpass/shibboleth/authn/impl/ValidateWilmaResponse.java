@@ -55,7 +55,6 @@ import net.shibboleth.shared.primitive.StringSupport;
 /**
  * Validates the Wilma authentication response.
  */
-@SuppressWarnings({"unchecked", "rawtypes"})
 public class ValidateWilmaResponse extends AbstractValidationAction {
 
     /** Class logger. */
@@ -123,7 +122,7 @@ public class ValidateWilmaResponse extends AbstractValidationAction {
             ActionSupport.buildEvent(profileRequestContext, EventIds.INVALID_PROFILE_CTX);
             return false;
         }
-        if (authenticationContext.getSubcontext(WilmaAuthenticationContext.class, false) == null) {
+        if (authenticationContext.getSubcontext(WilmaAuthenticationContext.class) == null) {
             log.warn("{}: No WilmaAuthenticationContext available in the context", getLogPrefix());
             ActionSupport.buildEvent(profileRequestContext, EventIds.INVALID_PROFILE_CTX);
             return false;
@@ -138,7 +137,7 @@ public class ValidateWilmaResponse extends AbstractValidationAction {
             @Nonnull final AuthenticationContext authenticationContext) {
         final HttpServletRequest servletRequest = getHttpServletRequest();
         final WilmaAuthenticationContext wilmaContext =
-                authenticationContext.getSubcontext(WilmaAuthenticationContext.class, false);
+                authenticationContext.getSubcontext(WilmaAuthenticationContext.class);
         final String nonce = wilmaContext.getNonce();
         if (!getQueryParam(servletRequest, WilmaAuthenticationContext.PARAM_NAME_NONCE).equals(nonce)) {
             log.warn("{}: Invalid nonce in the incoming Wilma response!", getLogPrefix());

@@ -25,7 +25,7 @@ THE SOFTWARE.
 	<parent>
 		<artifactId>idp-authn-wilma</artifactId>
 		<groupId>fi.mpass</groupId>
-		<version>1.1</version>
+		<version>1.2-rc1</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>idp-authn-impl-wilma</artifactId>
@@ -178,7 +178,7 @@ THE SOFTWARE.
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
-			<version>6.14.3</version>
+			<version>${org.testing.version}</version>
 			<scope>test</scope>
 		</dependency>
 

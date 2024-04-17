@@ -53,7 +53,6 @@ import net.shibboleth.shared.primitive.StringSupport;
 /**
  * Constructs a new {@link WilmaAuthenticationContext} and attaches it to {@link AuthenticationContext}.
  */
-@SuppressWarnings("rawtypes")
 public class InitializeDataSourceWilmaContext extends BaseInitializeWilmaContext {
     
     /** The database table name for Wilma authentication source settings. */
@@ -195,7 +194,7 @@ public class InitializeDataSourceWilmaContext extends BaseInitializeWilmaContext
     protected void createWilmaContext(final AuthenticationContext authenticationContext, 
             @Nonnull @NotEmpty final String endpointUrl) {
         final WilmaAuthenticationContext wilmaContext =
-                authenticationContext.getSubcontext(WilmaAuthenticationContext.class, true);
+                authenticationContext.ensureSubcontext(WilmaAuthenticationContext.class);
         final String nonce = getRandomNonce();
         wilmaContext.setNonce(nonce);
         wilmaContext.setRedirectUrl(endpointUrl);

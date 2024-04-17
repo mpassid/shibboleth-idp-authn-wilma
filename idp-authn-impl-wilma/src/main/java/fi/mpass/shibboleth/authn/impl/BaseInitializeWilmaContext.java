@@ -53,7 +53,6 @@ import net.shibboleth.shared.logic.Constraint;
  * Base class for constructing a new {@link WilmaAuthenticationContext} and attaching it to 
  * {@link AuthenticationContext}.
  */
-@SuppressWarnings("rawtypes")
 public abstract class BaseInitializeWilmaContext extends AbstractAuthenticationAction {
 
     /** Class logger. */

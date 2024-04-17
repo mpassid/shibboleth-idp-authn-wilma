@@ -40,6 +40,7 @@ import net.shibboleth.shared.primitive.NonnullSupplier;
 /**
  * Unit tests for {@link InitializeStaticWilmaContext}.
  */
+@SuppressWarnings("null")
 public class InitializeStaticWilmaContextTest extends BaseInitializeWilmaContextTest {
     
     /** The endpoint where to send authentication request. */
@@ -81,7 +82,7 @@ public class InitializeStaticWilmaContextTest extends BaseInitializeWilmaContext
             
         }); 
         action.initialize();
-        final AuthenticationContext authnContext = prc.getSubcontext(AuthenticationContext.class, false);
+        final AuthenticationContext authnContext = prc.getSubcontext(AuthenticationContext.class);
         authnContext.setAttemptedFlow(authenticationFlows.get(0));
         final Event event = action.execute(src);
         Assert.assertNull(event);
