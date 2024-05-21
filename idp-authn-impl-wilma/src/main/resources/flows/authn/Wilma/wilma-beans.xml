@@ -33,12 +33,12 @@ THE SOFTWARE.
        
    <bean id="ValidateWilmaResponse"
             class="fi.mpass.shibboleth.authn.impl.ValidateWilmaResponse" scope="prototype"
-            p:httpServletRequest-ref="shibboleth.HttpServletRequest">
+            p:httpServletRequestSupplier-ref="shibboleth.HttpServletRequestSupplier">
        <constructor-arg type="String" value="mockSharedSecret"/>
    </bean>
 
     <bean id="InitializeWilmaContext" class="fi.mpass.shibboleth.authn.impl.InitializeWilmaContext" scope="prototype"
-        p:httpServletRequest-ref="shibboleth.HttpServletRequest">
+        p:httpServletRequestSupplier-ref="shibboleth.HttpServletRequestSupplier">
        <constructor-arg type="String" value="mockSharedSecret"/>
        <constructor-arg type="String" value="https://testwilma.example.org/mpass"/>
     </bean>
