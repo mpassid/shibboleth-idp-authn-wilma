@@ -41,11 +41,12 @@ import fi.mpass.shibboleth.authn.context.WilmaAuthenticationContext;
 import net.shibboleth.idp.authn.context.AuthenticationContext;
 import net.shibboleth.idp.authn.impl.testing.BaseAuthenticationContextTest;
 import net.shibboleth.idp.profile.testing.ActionTestingSupport;
-import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
+import net.shibboleth.shared.component.ComponentInitializationException;
 
 /**
  * Unit tests to be shared for classes extending {@link BaseInitializeWilmaContext}.
  */
+@SuppressWarnings("null")
 public abstract class BaseInitializeWilmaContextTest extends BaseAuthenticationContextTest {
 
     /** The action to be tested. */
@@ -107,12 +108,12 @@ public abstract class BaseInitializeWilmaContextTest extends BaseAuthenticationC
      */
     protected void testSuccess(final boolean forcedAuth) throws Exception {
         action.initialize();
-        prc.getSubcontext(AuthenticationContext.class, false).setAttemptedFlow(authenticationFlows.get(0));
-        prc.getSubcontext(AuthenticationContext.class, false).setForceAuthn(forcedAuth);
+        prc.getSubcontext(AuthenticationContext.class).setAttemptedFlow(authenticationFlows.get(0));
+        prc.getSubcontext(AuthenticationContext.class).setForceAuthn(forcedAuth);
         final Event event = action.execute(src);
         Assert.assertNull(event);
-        final AuthenticationContext authnContext = prc.getSubcontext(AuthenticationContext.class, false);
-        final WilmaAuthenticationContext wilmaContext = authnContext.getSubcontext(WilmaAuthenticationContext.class, false);
+        final AuthenticationContext authnContext = prc.getSubcontext(AuthenticationContext.class);
+        final WilmaAuthenticationContext wilmaContext = authnContext.getSubcontext(WilmaAuthenticationContext.class);
         Assert.assertNotNull(wilmaContext);
         final String redirectUrl = action.getRedirect("execution=e1s1", authnContext);
         Assert.assertNotNull(redirectUrl);

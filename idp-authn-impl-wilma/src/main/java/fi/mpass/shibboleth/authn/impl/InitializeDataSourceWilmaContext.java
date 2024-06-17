@@ -43,18 +43,16 @@ import fi.mpass.shibboleth.authn.context.WilmaAuthenticationContext;
 import net.shibboleth.idp.authn.AuthnEventIds;
 import net.shibboleth.idp.authn.context.AuthenticationContext;
 import net.shibboleth.idp.authn.context.RequestedPrincipalContext;
-import net.shibboleth.utilities.java.support.annotation.constraint.NonNegative;
-import net.shibboleth.utilities.java.support.annotation.constraint.NonnullAfterInit;
-import net.shibboleth.utilities.java.support.annotation.constraint.NonnullElements;
-import net.shibboleth.utilities.java.support.annotation.constraint.NotEmpty;
-import net.shibboleth.utilities.java.support.component.ComponentSupport;
-import net.shibboleth.utilities.java.support.logic.Constraint;
-import net.shibboleth.utilities.java.support.primitive.StringSupport;
+import net.shibboleth.shared.annotation.constraint.NonNegative;
+import net.shibboleth.shared.annotation.constraint.NonnullAfterInit;
+import net.shibboleth.shared.annotation.constraint.NonnullElements;
+import net.shibboleth.shared.annotation.constraint.NotEmpty;
+import net.shibboleth.shared.logic.Constraint;
+import net.shibboleth.shared.primitive.StringSupport;
 
 /**
  * Constructs a new {@link WilmaAuthenticationContext} and attaches it to {@link AuthenticationContext}.
  */
-@SuppressWarnings("rawtypes")
 public class InitializeDataSourceWilmaContext extends BaseInitializeWilmaContext {
     
     /** The database table name for Wilma authentication source settings. */
@@ -117,7 +115,7 @@ public class InitializeDataSourceWilmaContext extends BaseInitializeWilmaContext
      * @param keyName What to set.
      */
     public void setSelectedAuthnStateKey(final String keyName) {
-        ComponentSupport.ifInitializedThrowUnmodifiabledComponentException(this);
+        ifInitializedThrowUnmodifiabledComponentException();
 
         selectedAuthnStateKey = Constraint.isNotEmpty(keyName, "selectedAuthnStataKey cannot be null");
     }
@@ -196,7 +194,7 @@ public class InitializeDataSourceWilmaContext extends BaseInitializeWilmaContext
     protected void createWilmaContext(final AuthenticationContext authenticationContext, 
             @Nonnull @NotEmpty final String endpointUrl) {
         final WilmaAuthenticationContext wilmaContext =
-                authenticationContext.getSubcontext(WilmaAuthenticationContext.class, true);
+                authenticationContext.ensureSubcontext(WilmaAuthenticationContext.class);
         final String nonce = getRandomNonce();
         wilmaContext.setNonce(nonce);
         wilmaContext.setRedirectUrl(endpointUrl);

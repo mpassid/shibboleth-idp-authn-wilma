@@ -33,7 +33,7 @@ import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import javax.security.auth.Subject;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
@@ -48,14 +48,13 @@ import net.shibboleth.idp.authn.AbstractValidationAction;
 import net.shibboleth.idp.authn.AuthnEventIds;
 import net.shibboleth.idp.authn.context.AuthenticationContext;
 import net.shibboleth.idp.authn.principal.UsernamePrincipal;
-import net.shibboleth.utilities.java.support.annotation.constraint.NotEmpty;
-import net.shibboleth.utilities.java.support.logic.Constraint;
-import net.shibboleth.utilities.java.support.primitive.StringSupport;
+import net.shibboleth.shared.annotation.constraint.NotEmpty;
+import net.shibboleth.shared.logic.Constraint;
+import net.shibboleth.shared.primitive.StringSupport;
 
 /**
  * Validates the Wilma authentication response.
  */
-@SuppressWarnings({"unchecked", "rawtypes"})
 public class ValidateWilmaResponse extends AbstractValidationAction {
 
     /** Class logger. */
@@ -123,7 +122,7 @@ public class ValidateWilmaResponse extends AbstractValidationAction {
             ActionSupport.buildEvent(profileRequestContext, EventIds.INVALID_PROFILE_CTX);
             return false;
         }
-        if (authenticationContext.getSubcontext(WilmaAuthenticationContext.class, false) == null) {
+        if (authenticationContext.getSubcontext(WilmaAuthenticationContext.class) == null) {
             log.warn("{}: No WilmaAuthenticationContext available in the context", getLogPrefix());
             ActionSupport.buildEvent(profileRequestContext, EventIds.INVALID_PROFILE_CTX);
             return false;
@@ -138,7 +137,7 @@ public class ValidateWilmaResponse extends AbstractValidationAction {
             @Nonnull final AuthenticationContext authenticationContext) {
         final HttpServletRequest servletRequest = getHttpServletRequest();
         final WilmaAuthenticationContext wilmaContext =
-                authenticationContext.getSubcontext(WilmaAuthenticationContext.class, false);
+                authenticationContext.getSubcontext(WilmaAuthenticationContext.class);
         final String nonce = wilmaContext.getNonce();
         if (!getQueryParam(servletRequest, WilmaAuthenticationContext.PARAM_NAME_NONCE).equals(nonce)) {
             log.warn("{}: Invalid nonce in the incoming Wilma response!", getLogPrefix());

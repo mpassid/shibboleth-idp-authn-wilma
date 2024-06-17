@@ -33,13 +33,12 @@ import org.slf4j.LoggerFactory;
 
 import fi.mpass.shibboleth.authn.context.WilmaAuthenticationContext;
 import net.shibboleth.idp.authn.context.AuthenticationContext;
-import net.shibboleth.utilities.java.support.annotation.constraint.NotEmpty;
-import net.shibboleth.utilities.java.support.logic.Constraint;
+import net.shibboleth.shared.annotation.constraint.NotEmpty;
+import net.shibboleth.shared.logic.Constraint;
 
 /**
  * Constructs a new {@link WilmaAuthenticationContext} and attaches it to {@link AuthenticationContext}.
  */
-@SuppressWarnings("rawtypes")
 public class InitializeStaticWilmaContext extends BaseInitializeWilmaContext {
 
     /** Class logger. */
@@ -77,7 +76,7 @@ public class InitializeStaticWilmaContext extends BaseInitializeWilmaContext {
     protected void doExecute(@Nonnull final ProfileRequestContext profileRequestContext,
             @Nonnull final AuthenticationContext authenticationContext) {
         final WilmaAuthenticationContext wilmaContext =
-                authenticationContext.getSubcontext(WilmaAuthenticationContext.class, true);
+                authenticationContext.ensureSubcontext(WilmaAuthenticationContext.class);
         final String nonce = getRandomNonce();
         wilmaContext.setNonce(nonce);
         wilmaContext.setRedirectUrl(endpoint);

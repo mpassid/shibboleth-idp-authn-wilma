@@ -25,17 +25,22 @@ package fi.mpass.shibboleth.authn.impl;
 
 import java.io.UnsupportedEncodingException;
 
+import javax.annotation.Nonnull;
+
 import org.springframework.webflow.execution.Event;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import jakarta.servlet.http.HttpServletRequest;
 import net.shibboleth.idp.authn.context.AuthenticationContext;
-import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
+import net.shibboleth.shared.component.ComponentInitializationException;
+import net.shibboleth.shared.primitive.NonnullSupplier;
 
 /**
  * Unit tests for {@link InitializeStaticWilmaContext}.
  */
+@SuppressWarnings("null")
 public class InitializeStaticWilmaContextTest extends BaseInitializeWilmaContextTest {
     
     /** The endpoint where to send authentication request. */
@@ -51,7 +56,15 @@ public class InitializeStaticWilmaContextTest extends BaseInitializeWilmaContext
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}        
-        action.setHttpServletRequest(initializeServletRequest());
+        action.setHttpServletRequestSupplier(new NonnullSupplier<HttpServletRequest>() {
+
+            @Override
+            @Nonnull
+            public HttpServletRequest get() {
+                return initializeServletRequest();
+            }
+            
+        }); 
     }
     
     /**
@@ -59,9 +72,17 @@ public class InitializeStaticWilmaContextTest extends BaseInitializeWilmaContext
      */
     @Test public void testInvalidAlgorithm() throws Exception {
         action = new InitializeStaticWilmaContext(sharedSecret, wilmaEndpoint, "InvalidAlgorithm");
-        action.setHttpServletRequest(initializeServletRequest());
+        action.setHttpServletRequestSupplier(new NonnullSupplier<HttpServletRequest>() {
+
+            @Override
+            @Nonnull
+            public HttpServletRequest get() {
+                return initializeServletRequest();
+            }
+            
+        }); 
         action.initialize();
-        final AuthenticationContext authnContext = prc.getSubcontext(AuthenticationContext.class, false);
+        final AuthenticationContext authnContext = prc.getSubcontext(AuthenticationContext.class);
         authnContext.setAttemptedFlow(authenticationFlows.get(0));
         final Event event = action.execute(src);
         Assert.assertNull(event);

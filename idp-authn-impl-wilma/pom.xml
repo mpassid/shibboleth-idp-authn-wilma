@@ -25,7 +25,7 @@ THE SOFTWARE.
 	<parent>
 		<artifactId>idp-authn-wilma</artifactId>
 		<groupId>fi.mpass</groupId>
-		<version>1.1</version>
+		<version>1.2</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>idp-authn-impl-wilma</artifactId>
@@ -58,11 +58,11 @@ THE SOFTWARE.
 			<artifactId>idp-profile-api</artifactId>
 		</dependency>
 
-		<dependency>
+		<!--dependency>
 			<groupId>${opensaml.groupId}</groupId>
 			<artifactId>opensaml-core</artifactId>
 			<version>${opensaml.version}</version>
-		</dependency>
+		</dependency-->
 		<dependency>
 			<groupId>${opensaml.groupId}</groupId>
 			<artifactId>opensaml-profile-api</artifactId>
@@ -71,8 +71,8 @@ THE SOFTWARE.
 
 		<!-- Provided Dependencies -->
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
 
@@ -80,12 +80,29 @@ THE SOFTWARE.
 		<!-- Runtime Dependencies -->
 
 		<!-- Test Dependencies -->
+        <dependency>
+            <groupId>${opensaml.groupId}</groupId>
+            <artifactId>opensaml-core-impl</artifactId>
+            <version>${opensaml.version}</version>
+            <scope>test</scope>
+        </dependency>
 		<dependency>
 			<groupId>${opensaml.groupId}</groupId>
-			<artifactId>opensaml-core</artifactId>
+			<artifactId>opensaml-testing</artifactId>
 			<version>${opensaml.version}</version>
 			<scope>test</scope>
-			<type>test-jar</type>
+		</dependency>
+		<dependency>
+			<groupId>net.shibboleth</groupId>
+			<artifactId>shib-testing</artifactId>
+			<version>9.0.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.shibboleth.idp</groupId>
+			<artifactId>idp-testing</artifactId>
+			<version>${shib.idp.version}</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>${opensaml.groupId}</groupId>
@@ -161,7 +178,7 @@ THE SOFTWARE.
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
-			<version>6.14.3</version>
+			<version>${org.testing.version}</version>
 			<scope>test</scope>
 		</dependency>
 

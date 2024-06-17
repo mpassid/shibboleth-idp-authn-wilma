@@ -26,6 +26,7 @@ package fi.mpass.shibboleth.authn.impl;
 import java.io.UnsupportedEncodingException;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.security.auth.Subject;
 
 import org.opensaml.profile.action.EventIds;
@@ -36,17 +37,19 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import fi.mpass.shibboleth.authn.context.WilmaAuthenticationContext;
+import jakarta.servlet.http.HttpServletRequest;
 import net.shibboleth.idp.authn.AuthnEventIds;
 import net.shibboleth.idp.authn.context.AuthenticationContext;
 import net.shibboleth.idp.authn.impl.testing.BaseAuthenticationContextTest;
 import net.shibboleth.idp.authn.principal.UsernamePrincipal;
 import net.shibboleth.idp.profile.testing.ActionTestingSupport;
-//import net.shibboleth.idp.profile.ActionTestingSupport;
-import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
+import net.shibboleth.shared.component.ComponentInitializationException;
+import net.shibboleth.shared.primitive.NonnullSupplier;
 
 /**
  * Unit tests for {@link ValidateWilmaResponse}.
  */
+@SuppressWarnings("null")
 public class ValidateWilmaResponseTest extends BaseAuthenticationContextTest {
 
     /** The action to be tested. */
@@ -79,7 +82,34 @@ public class ValidateWilmaResponseTest extends BaseAuthenticationContextTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        action.setHttpServletRequest(initializeServletRequest(true, true, true));
+        action.setHttpServletRequestSupplier(initializeServletRequestSupplier(true, true, true));
+        
+    }
+
+    /**
+     * Initialize the servlet request for testing.
+     * 
+     * @param addNonce Whether or not to include nonce
+     * @param addUserid Whether or not to include userid
+     * @param addChecksum Whether or not to include checksum
+     * @return
+     */
+    protected NonnullSupplier<HttpServletRequest> initializeServletRequestSupplier(final boolean addNonce, final boolean addUserid,
+            final boolean addChecksum) {
+        final MockHttpServletRequest servletRequest = new MockHttpServletRequest();
+        servletRequest.setScheme("https");
+        servletRequest.setServerName("mock-proxy.mpass.id");
+        servletRequest.setServerPort(443);
+        servletRequest.setRequestURI("/idp/profile/SAML2/Redirect/SSO");
+        servletRequest.setQueryString(generateQuery(addNonce, addUserid, addChecksum));
+        return new NonnullSupplier<HttpServletRequest>() {
+
+            @Override
+            public HttpServletRequest get() {
+                return servletRequest;
+            }
+            
+        };
     }
 
     /**
@@ -140,10 +170,18 @@ public class ValidateWilmaResponseTest extends BaseAuthenticationContextTest {
      */
     @Test
     protected void testNoServlet() throws Exception {
-        action.setHttpServletRequest(null);
+        action.setHttpServletRequestSupplier(new NonnullSupplier<HttpServletRequest>() {
+
+            @Override
+            @Nonnull
+            public HttpServletRequest get() {
+                return null;
+            }
+            
+        }); 
         action.initialize();
-        prc.getSubcontext(AuthenticationContext.class, false).setAttemptedFlow(authenticationFlows.get(0));
-        prc.getSubcontext(AuthenticationContext.class, false).getSubcontext(WilmaAuthenticationContext.class, true);
+        prc.getSubcontext(AuthenticationContext.class).setAttemptedFlow(authenticationFlows.get(0));
+        prc.getSubcontext(AuthenticationContext.class).ensureSubcontext(WilmaAuthenticationContext.class);
         final Event event = action.execute(src);
         ActionTestingSupport.assertEvent(event, EventIds.INVALID_PROFILE_CTX);
     }
@@ -154,9 +192,9 @@ public class ValidateWilmaResponseTest extends BaseAuthenticationContextTest {
      */
     @Test
     protected void testNoWilmaContext() throws Exception {
-        action.setHttpServletRequest(initializeServletRequest(true, true, true));
+        action.setHttpServletRequestSupplier(initializeServletRequestSupplier(true, true, true));
         action.initialize();
-        prc.getSubcontext(AuthenticationContext.class, false).setAttemptedFlow(authenticationFlows.get(0));
+        prc.getSubcontext(AuthenticationContext.class).setAttemptedFlow(authenticationFlows.get(0));
         final Event event = action.execute(src);
         ActionTestingSupport.assertEvent(event, EventIds.INVALID_PROFILE_CTX);
     }
@@ -167,10 +205,10 @@ public class ValidateWilmaResponseTest extends BaseAuthenticationContextTest {
      */
     @Test
     protected void testNoNonce() throws Exception {
-        action.setHttpServletRequest(initializeServletRequest(false, true, true));
+        action.setHttpServletRequestSupplier(initializeServletRequestSupplier(false, true, true));
         action.initialize();
-        prc.getSubcontext(AuthenticationContext.class, false).setAttemptedFlow(authenticationFlows.get(0));
-        prc.getSubcontext(AuthenticationContext.class, false).getSubcontext(WilmaAuthenticationContext.class, true);
+        prc.getSubcontext(AuthenticationContext.class).setAttemptedFlow(authenticationFlows.get(0));
+        prc.getSubcontext(AuthenticationContext.class).ensureSubcontext(WilmaAuthenticationContext.class);
         final Event event = action.execute(src);
         ActionTestingSupport.assertEvent(event, EventIds.INVALID_PROFILE_CTX);
     }
@@ -181,10 +219,10 @@ public class ValidateWilmaResponseTest extends BaseAuthenticationContextTest {
      */
     @Test
     protected void testNoUserid() throws Exception {
-        action.setHttpServletRequest(initializeServletRequest(true, false, true));
+        action.setHttpServletRequestSupplier(initializeServletRequestSupplier(true, false, true));
         action.initialize();
-        prc.getSubcontext(AuthenticationContext.class, false).setAttemptedFlow(authenticationFlows.get(0));
-        prc.getSubcontext(AuthenticationContext.class, false).getSubcontext(WilmaAuthenticationContext.class, true);
+        prc.getSubcontext(AuthenticationContext.class).setAttemptedFlow(authenticationFlows.get(0));
+        prc.getSubcontext(AuthenticationContext.class).ensureSubcontext(WilmaAuthenticationContext.class);
         final Event event = action.execute(src);
         ActionTestingSupport.assertEvent(event, EventIds.INVALID_PROFILE_CTX);
     }
@@ -195,10 +233,10 @@ public class ValidateWilmaResponseTest extends BaseAuthenticationContextTest {
      */
     @Test
     protected void testNoChecksum() throws Exception {
-        action.setHttpServletRequest(initializeServletRequest(true, true, false));
+        action.setHttpServletRequestSupplier(initializeServletRequestSupplier(true, true, false));
         action.initialize();
-        prc.getSubcontext(AuthenticationContext.class, false).setAttemptedFlow(authenticationFlows.get(0));
-        prc.getSubcontext(AuthenticationContext.class, false).getSubcontext(WilmaAuthenticationContext.class, true);
+        prc.getSubcontext(AuthenticationContext.class).setAttemptedFlow(authenticationFlows.get(0));
+        prc.getSubcontext(AuthenticationContext.class).ensureSubcontext(WilmaAuthenticationContext.class);
         final Event event = action.execute(src);
         ActionTestingSupport.assertEvent(event, EventIds.INVALID_PROFILE_CTX);
     }
@@ -210,8 +248,8 @@ public class ValidateWilmaResponseTest extends BaseAuthenticationContextTest {
     @Test
     protected void testNoNonceInContext() throws Exception {
         action.initialize();
-        prc.getSubcontext(AuthenticationContext.class, false).setAttemptedFlow(authenticationFlows.get(0));
-        prc.getSubcontext(AuthenticationContext.class, false).getSubcontext(WilmaAuthenticationContext.class, true);
+        prc.getSubcontext(AuthenticationContext.class).setAttemptedFlow(authenticationFlows.get(0));
+        prc.getSubcontext(AuthenticationContext.class).ensureSubcontext(WilmaAuthenticationContext.class);
         final Event event = action.execute(src);
         ActionTestingSupport.assertEvent(event, AuthnEventIds.NO_CREDENTIALS);
     }
@@ -224,11 +262,16 @@ public class ValidateWilmaResponseTest extends BaseAuthenticationContextTest {
     protected void testInvalidChecksumFormat() throws Exception {
         MockHttpServletRequest servletRequest = initializeServletRequest(true, true, true);
         servletRequest.setQueryString(servletRequest.getQueryString() + "invalid");
-        action.setHttpServletRequest(servletRequest);
+        action.setHttpServletRequestSupplier(new NonnullSupplier<HttpServletRequest>() {
+
+            @Override
+            public HttpServletRequest get() {
+                return servletRequest;
+            }});
         action.initialize();
-        prc.getSubcontext(AuthenticationContext.class, false).setAttemptedFlow(authenticationFlows.get(0));
-        final WilmaAuthenticationContext wilmaContext = prc.getSubcontext(AuthenticationContext.class, false)
-                .getSubcontext(WilmaAuthenticationContext.class, true);
+        prc.getSubcontext(AuthenticationContext.class).setAttemptedFlow(authenticationFlows.get(0));
+        final WilmaAuthenticationContext wilmaContext = prc.getSubcontext(AuthenticationContext.class)
+                .ensureSubcontext(WilmaAuthenticationContext.class);
         wilmaContext.setNonce(nonce);
         final Event event = action.execute(src);
         ActionTestingSupport.assertEvent(event, AuthnEventIds.NO_CREDENTIALS);
@@ -243,11 +286,16 @@ public class ValidateWilmaResponseTest extends BaseAuthenticationContextTest {
         MockHttpServletRequest servletRequest = initializeServletRequest(true, true, true);
         final String query = servletRequest.getQueryString();
         servletRequest.setQueryString(query.substring(0, query.length() - 2) + "11");
-        action.setHttpServletRequest(servletRequest);
+        action.setHttpServletRequestSupplier(new NonnullSupplier<HttpServletRequest>() {
+
+            @Override
+            public HttpServletRequest get() {
+                return servletRequest;
+            }});
         action.initialize();
-        prc.getSubcontext(AuthenticationContext.class, false).setAttemptedFlow(authenticationFlows.get(0));
-        final WilmaAuthenticationContext wilmaContext = prc.getSubcontext(AuthenticationContext.class, false)
-                .getSubcontext(WilmaAuthenticationContext.class, true);
+        prc.getSubcontext(AuthenticationContext.class).setAttemptedFlow(authenticationFlows.get(0));
+        final WilmaAuthenticationContext wilmaContext = prc.getSubcontext(AuthenticationContext.class)
+                .ensureSubcontext(WilmaAuthenticationContext.class);
         wilmaContext.setNonce(nonce);
         final Event event = action.execute(src);
         ActionTestingSupport.assertEvent(event, AuthnEventIds.NO_CREDENTIALS);
@@ -260,13 +308,13 @@ public class ValidateWilmaResponseTest extends BaseAuthenticationContextTest {
     @Test
     protected void testSuccess() throws Exception {
         action.initialize();
-        prc.getSubcontext(AuthenticationContext.class, false).setAttemptedFlow(authenticationFlows.get(0));
-        final WilmaAuthenticationContext wilmaContext = prc.getSubcontext(AuthenticationContext.class, false)
-                .getSubcontext(WilmaAuthenticationContext.class, true);
+        prc.getSubcontext(AuthenticationContext.class).setAttemptedFlow(authenticationFlows.get(0));
+        final WilmaAuthenticationContext wilmaContext = prc.getSubcontext(AuthenticationContext.class)
+                .ensureSubcontext(WilmaAuthenticationContext.class);
         wilmaContext.setNonce(nonce);
         final Event event = action.execute(src);
         Assert.assertNull(event);
-        final Subject subject = prc.getSubcontext(AuthenticationContext.class, false).getAuthenticationResult().getSubject();
+        final Subject subject = prc.getSubcontext(AuthenticationContext.class).getAuthenticationResult().getSubject();
         Assert.assertNotNull(subject);
         Set<UsernamePrincipal> principals = subject.getPrincipals(UsernamePrincipal.class);
         Assert.assertEquals(principals.size(), 1);

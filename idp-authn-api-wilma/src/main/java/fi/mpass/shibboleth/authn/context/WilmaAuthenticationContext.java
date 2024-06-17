@@ -27,7 +27,7 @@ import javax.annotation.Nonnull;
 
 import org.opensaml.messaging.context.BaseContext;
 
-import net.shibboleth.utilities.java.support.annotation.constraint.NotEmpty;
+import net.shibboleth.shared.annotation.constraint.NotEmpty;
 
 /**
  * This context stores attributes required for creating an authentication

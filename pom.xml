@@ -26,11 +26,11 @@ THE SOFTWARE.
 	<parent>
 		<groupId>net.shibboleth</groupId>
 		<artifactId>parent</artifactId>
-		<version>11.3.3</version>
+		<version>17.0.2</version>
 	</parent>
 	<groupId>fi.mpass</groupId>
 	<artifactId>idp-authn-wilma</artifactId>
-	<version>1.1</version>
+	<version>1.2</version>
 	<packaging>pom</packaging>
 
 	<modules>
@@ -40,12 +40,13 @@ THE SOFTWARE.
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>11</maven.compiler.source>
-		<maven.compiler.target>11</maven.compiler.target>
-		<shib.idp.version>4.2.1</shib.idp.version>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+		<shib.idp.version>5.0.0</shib.idp.version>
 		<gson.version>2.9.0</gson.version>
 		<opensaml.groupId>org.opensaml</opensaml.groupId>
-		<opensaml.version>4.2.0</opensaml.version>
+		<opensaml.version>5.0.0</opensaml.version>
+		<org.testing.version>7.7.1</org.testing.version>
 		<checkstyle.configLocation>mpassid-checkstyle.xml</checkstyle.configLocation>
 	</properties>
 
@@ -119,7 +120,7 @@ THE SOFTWARE.
 			</dependency>
 			<dependency>
 				<groupId>${opensaml.groupId}</groupId>
-				<artifactId>opensaml-core</artifactId>
+				<artifactId>opensaml-testing</artifactId>
 				<version>${opensaml.version}</version>
 				<type>test-jar</type>
 				<scope>test</scope>

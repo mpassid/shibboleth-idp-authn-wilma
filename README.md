@@ -1,4 +1,4 @@
-# Shibboleth IdP v3: Wilma Authentication
+# Shibboleth IdP v5: Wilma Authentication
 
 [![License](http://img.shields.io/:license-mit-blue.svg)](https://opensource.org/licenses/MIT)
 [![Build Status](https://travis-ci.org/mpassid/shibboleth-idp-authn-wilma.svg?branch=master)](https://travis-ci.org/mpassid/shibboleth-idp-authn-wilma)
@@ -13,7 +13,7 @@ prompting and validating the user credentials locally.
 
 ## Prerequisities and compilation
 
-- Java 7+
+- Java 17+
 - [Apache Maven 3](https://maven.apache.org/)
 
 ```
